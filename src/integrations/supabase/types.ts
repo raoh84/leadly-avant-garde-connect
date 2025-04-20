@@ -9,6 +9,68 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
+      clients: {
+        Row: {
+          contact_status: string | null
+          date_added: string | null
+          details: string | null
+          id: string
+          last_activity: string | null
+          name: string
+          user_id: string
+        }
+        Insert: {
+          contact_status?: string | null
+          date_added?: string | null
+          details?: string | null
+          id?: string
+          last_activity?: string | null
+          name: string
+          user_id: string
+        }
+        Update: {
+          contact_status?: string | null
+          date_added?: string | null
+          details?: string | null
+          id?: string
+          last_activity?: string | null
+          name?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      content_views: {
+        Row: {
+          client_id: string
+          content_type: string
+          id: string
+          user_id: string
+          viewed_at: string | null
+        }
+        Insert: {
+          client_id: string
+          content_type: string
+          id?: string
+          user_id: string
+          viewed_at?: string | null
+        }
+        Update: {
+          client_id?: string
+          content_type?: string
+          id?: string
+          user_id?: string
+          viewed_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "content_views_client_id_fkey"
+            columns: ["client_id"]
+            isOneToOne: false
+            referencedRelation: "clients"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       profiles: {
         Row: {
           avatar_url: string | null
@@ -42,6 +104,33 @@ export type Database = {
           role?: string | null
           subscription_tier?: string | null
           updated_at?: string
+        }
+        Relationships: []
+      }
+      team_members: {
+        Row: {
+          date_added: string | null
+          id: string
+          name: string
+          role: string | null
+          team_id: string
+          user_id: string
+        }
+        Insert: {
+          date_added?: string | null
+          id?: string
+          name: string
+          role?: string | null
+          team_id: string
+          user_id: string
+        }
+        Update: {
+          date_added?: string | null
+          id?: string
+          name?: string
+          role?: string | null
+          team_id?: string
+          user_id?: string
         }
         Relationships: []
       }
