@@ -3,11 +3,17 @@ import React, { useState, useEffect } from 'react';
 import { Button } from "@/components/ui/button";
 import { useLanguage } from '@/contexts/LanguageContext';
 import { Menu, X } from 'lucide-react';
+import { Link, useNavigate } from 'react-router-dom';
+import { supabase } from '@/integrations/supabase/client';
+import { useToast } from '@/hooks/use-toast';
 
 const Navbar = () => {
   const { language, setLanguage, t } = useLanguage();
   const [isOpen, setIsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const [user, setUser] = useState(null);
+  const navigate = useNavigate();
+  const { toast } = useToast();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -22,8 +28,40 @@ const Navbar = () => {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
+  useEffect(() => {
+    // Set up auth state listener
+    const { data: { subscription } } = supabase.auth.onAuthStateChange(
+      (event, session) => {
+        setUser(session?.user ?? null);
+      }
+    );
+
+    // Check current session
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      setUser(session?.user ?? null);
+    });
+
+    return () => subscription.unsubscribe();
+  }, []);
+
   const toggleLanguage = () => {
     setLanguage(language === 'en' ? 'fr' : 'en');
+  };
+
+  const handleLogout = async () => {
+    try {
+      await supabase.auth.signOut();
+      navigate('/');
+      toast({
+        title: t('auth.logoutSuccess'),
+      });
+    } catch (error: any) {
+      toast({
+        variant: "destructive",
+        title: t('auth.error'),
+        description: error.message,
+      });
+    }
   };
 
   return (
@@ -32,7 +70,9 @@ const Navbar = () => {
         <div className="flex justify-between h-16 items-center">
           <div className="flex items-center">
             <div className="flex-shrink-0">
-              <span className="text-2xl font-bold text-leadly-purple">Leadly</span>
+              <Link to="/" className="text-2xl font-bold text-leadly-purple">
+                Leadly
+              </Link>
             </div>
             <div className="hidden md:block ml-10">
               <div className="flex items-center space-x-4">
@@ -55,12 +95,20 @@ const Navbar = () => {
             >
               {language === 'en' ? 'FR' : 'EN'}
             </button>
-            <Button variant="ghost" className="text-gray-700">
-              {t('nav.login')}
-            </Button>
-            <Button className="bg-leadly-purple hover:bg-leadly-purple/90">
-              {t('nav.getStarted')}
-            </Button>
+            {user ? (
+              <Button onClick={handleLogout} variant="ghost" className="text-gray-700">
+                {t('nav.logout')}
+              </Button>
+            ) : (
+              <>
+                <Button variant="ghost" className="text-gray-700" onClick={() => navigate('/auth')}>
+                  {t('nav.login')}
+                </Button>
+                <Button className="bg-leadly-purple hover:bg-leadly-purple/90" onClick={() => navigate('/auth')}>
+                  {t('nav.getStarted')}
+                </Button>
+              </>
+            )}
           </div>
           <div className="md:hidden flex items-center">
             <button
@@ -104,16 +152,26 @@ const Navbar = () => {
               {t('nav.faq')}
             </a>
             <div className="pt-4 pb-3 border-t border-gray-200">
-              <div className="flex items-center px-5">
-                <Button variant="ghost" className="w-full text-gray-700 justify-start">
-                  {t('nav.login')}
-                </Button>
-              </div>
-              <div className="mt-3 px-5">
-                <Button className="w-full bg-leadly-purple hover:bg-leadly-purple/90">
-                  {t('nav.getStarted')}
-                </Button>
-              </div>
+              {user ? (
+                <div className="px-5">
+                  <Button onClick={handleLogout} variant="ghost" className="w-full text-gray-700 justify-start">
+                    {t('nav.logout')}
+                  </Button>
+                </div>
+              ) : (
+                <>
+                  <div className="flex items-center px-5">
+                    <Button variant="ghost" className="w-full text-gray-700 justify-start" onClick={() => { navigate('/auth'); setIsOpen(false); }}>
+                      {t('nav.login')}
+                    </Button>
+                  </div>
+                  <div className="mt-3 px-5">
+                    <Button className="w-full bg-leadly-purple hover:bg-leadly-purple/90" onClick={() => { navigate('/auth'); setIsOpen(false); }}>
+                      {t('nav.getStarted')}
+                    </Button>
+                  </div>
+                </>
+              )}
             </div>
           </div>
         </div>
