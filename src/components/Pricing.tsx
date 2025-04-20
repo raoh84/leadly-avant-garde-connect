@@ -1,5 +1,5 @@
-
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { Button } from "@/components/ui/button";
 import { Check, X } from 'lucide-react';
@@ -13,9 +13,14 @@ import {
 const Pricing = () => {
   const { t } = useLanguage();
   const [yearly, setYearly] = useState(false);
+  const navigate = useNavigate();
 
   const toggleBilling = () => {
     setYearly(!yearly);
+  };
+
+  const handlePricingClick = (plan: string) => {
+    navigate(`/auth?plan=${plan}`);
   };
 
   const pricingPlans = [
@@ -32,6 +37,7 @@ const Pricing = () => {
       ],
       cta: t('pricing.free.cta'),
       highlight: false,
+      plan: 'free',
     },
     {
       title: t('pricing.pro.title'),
@@ -50,6 +56,7 @@ const Pricing = () => {
       cta: t('pricing.pro.cta'),
       highlight: true,
       trial: '14-day free trial',
+      plan: 'pro',
     },
     {
       title: t('pricing.ultimate.title'),
@@ -67,6 +74,7 @@ const Pricing = () => {
       ],
       cta: t('pricing.ultimate.cta'),
       highlight: false,
+      plan: 'ultimate',
     },
   ];
 
@@ -191,6 +199,7 @@ const Pricing = () => {
                     : 'bg-white text-leadly-purple border border-leadly-purple hover:bg-leadly-purple/10'
                 }`}
                 variant={plan.highlight ? 'default' : 'outline'}
+                onClick={() => handlePricingClick(plan.plan)}
               >
                 {plan.cta}
               </Button>
