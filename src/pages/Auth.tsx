@@ -2,9 +2,9 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { AuthForm } from '@/components/auth/AuthForm';
-import { useLanguage } from '@/contexts/LanguageContext';
+import { LanguageProvider, useLanguage } from '@/contexts/LanguageContext';
 
-const Auth = () => {
+const AuthContent = () => {
   const { t } = useLanguage();
   const navigate = useNavigate();
 
@@ -20,6 +20,14 @@ const Auth = () => {
         <AuthForm />
       </div>
     </div>
+  );
+};
+
+const Auth = () => {
+  return (
+    <LanguageProvider>
+      <AuthContent />
+    </LanguageProvider>
   );
 };
 
