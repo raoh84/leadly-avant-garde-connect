@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { Button } from "@/components/ui/button";
 import { useLanguage } from '@/contexts/LanguageContext';
@@ -6,6 +5,7 @@ import { Menu, X } from 'lucide-react';
 import { Link, useNavigate } from 'react-router-dom';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
+import { UserProfile } from './UserProfile';
 
 const Navbar = () => {
   const { language, setLanguage, t } = useLanguage();
@@ -29,14 +29,12 @@ const Navbar = () => {
   }, []);
 
   useEffect(() => {
-    // Set up auth state listener
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
       (event, session) => {
         setUser(session?.user ?? null);
       }
     );
 
-    // Check current session
     supabase.auth.getSession().then(({ data: { session } }) => {
       setUser(session?.user ?? null);
     });
@@ -96,9 +94,7 @@ const Navbar = () => {
               {language === 'en' ? 'FR' : 'EN'}
             </button>
             {user ? (
-              <Button onClick={handleLogout} variant="ghost" className="text-gray-700">
-                {t('nav.logout')}
-              </Button>
+              <UserProfile />
             ) : (
               <>
                 <Button variant="ghost" className="text-gray-700" onClick={() => navigate('/auth')}>
