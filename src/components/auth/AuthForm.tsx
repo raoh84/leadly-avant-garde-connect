@@ -34,17 +34,27 @@ export const AuthForm = () => {
           },
         });
         if (error) throw error;
+        
         toast({
           title: t('auth.signUpSuccess'),
           description: t('auth.checkEmail'),
         });
+        
+        // Immediately sign in after successful signup
+        const { error: signInError } = await supabase.auth.signInWithPassword({
+          email,
+          password,
+        });
+        
+        if (signInError) throw signInError;
+        navigate('/dashboard');
       } else {
         const { error } = await supabase.auth.signInWithPassword({
           email,
           password,
         });
         if (error) throw error;
-        navigate('/');
+        navigate('/dashboard');
       }
     } catch (error: any) {
       toast({
@@ -97,7 +107,7 @@ export const AuthForm = () => {
         </div>
       </div>
 
-      <Button type="submit" className="w-full" disabled={isLoading}>
+      <Button type="submit" className="w-full bg-leadly-purple hover:bg-leadly-purple/90" disabled={isLoading}>
         {isLoading ? t('auth.processing') : (isSignUp ? t('auth.signUp') : t('auth.signIn'))}
       </Button>
 
