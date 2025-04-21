@@ -1,4 +1,6 @@
 
+// Update the tailwind.config.ts colors section to include leadly-soft-purple and leadly-soft-blue
+
 import { fontFamily } from "tailwindcss/defaultTheme";
 import plugin from "tailwindcss/plugin";
 
@@ -21,6 +23,11 @@ export default {
           blue: "#3B82F6",
           gray: "#F3F4F6",
           dark: "#1F2937",
+          // Added missing colors for the gradient stops
+          "soft-purple": "#E5DEFF",
+          "soft-blue": "#DCEEFF",
+          "dark-purple": "#4B3F9B",
+          // Feel free to add any other supplementary variants here
         },
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
