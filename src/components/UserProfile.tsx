@@ -1,5 +1,5 @@
 
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
@@ -10,23 +10,30 @@ import { useToast } from '@/hooks/use-toast';
 export const UserProfile = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
-  // Get language context safely
-  let t: (key: string) => string;
-  try {
-    const langContext = useLanguage();
-    t = langContext.t;
-  } catch (error) {
-    // Fallback if the language context is not available
-    t = (key: string) => {
-      // Default translations for critical text
-      const defaults: Record<string, string> = {
-        'nav.logout': 'Logout',
-        'auth.logoutSuccess': 'Successfully logged out',
-        'auth.error': 'Error'
-      };
-      return defaults[key] || key;
-    };
-  }
+  const langContext = useLanguage();
+  const t = langContext?.t ?? ((key: string) => key);
+
+  // Show user avatar & initials
+  const [avatarUrl, setAvatarUrl] = useState<string | null>(null);
+  const [initials, setInitials] = useState("U");
+
+  useEffect(() => {
+    // Retrieve user from Supabase
+    supabase.auth.getUser().then(({ data }) => {
+      const user = data?.user;
+      if (user) {
+        // Try to get avatar from user's metadata if available
+        const avatarMeta = (user.user_metadata && user.user_metadata.avatar_url) || null;
+        setAvatarUrl(avatarMeta ?? null);
+
+        // Get initials
+        let initials = (user.user_metadata && user.user_metadata.full_name) ?
+          user.user_metadata.full_name.split(' ').map((n: string) => n[0]).join('') :
+          (user.email ? user.email.substring(0, 2).toUpperCase() : "U");
+        setInitials(initials);
+      }
+    });
+  }, []);
 
   const handleLogout = async () => {
     try {
@@ -46,10 +53,16 @@ export const UserProfile = () => {
 
   return (
     <div className="flex items-center gap-4">
-      <Avatar>
-        <AvatarFallback>U</AvatarFallback>
+      <Avatar className="h-9 w-9 border border-gray-200">
+        {avatarUrl ? (
+          <AvatarImage src={avatarUrl} alt="User Avatar" />
+        ) : (
+          <AvatarFallback className="bg-leadly-soft-purple text-leadly-purple font-bold">
+            {initials}
+          </AvatarFallback>
+        )}
       </Avatar>
-      <Button variant="ghost" onClick={handleLogout}>
+      <Button variant="ghost" onClick={handleLogout} className="font-medium text-gray-700">
         {t('nav.logout')}
       </Button>
     </div>

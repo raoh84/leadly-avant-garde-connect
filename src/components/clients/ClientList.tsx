@@ -10,7 +10,6 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
@@ -19,8 +18,6 @@ import {
   Plus, 
   Search, 
   Filter, 
-  ArrowDown, 
-  CalendarDays, 
   User, 
   UserPlus 
 } from 'lucide-react';
@@ -66,7 +63,7 @@ const ClientList = ({ filter = 'all' }: ClientListProps) => {
       // }
 
       const { data, error } = await query.order('date_added', { ascending: false });
-      
+
       if (error) {
         toast({
           variant: "destructive",
@@ -75,13 +72,12 @@ const ClientList = ({ filter = 'all' }: ClientListProps) => {
         });
         throw error;
       }
-      
+
       return data as Client[];
     }
   });
 
   const handleAddNewClient = () => {
-    // This would open a modal to add a new client
     toast({
       title: "Add new client",
       description: "This feature is coming soon!",
@@ -90,108 +86,100 @@ const ClientList = ({ filter = 'all' }: ClientListProps) => {
 
   if (isLoading) {
     return (
-      <div className="flex justify-center items-center p-8">
-        <div className="flex flex-col items-center gap-4">
-          <Loader className="h-8 w-8 animate-spin text-leadly-purple" />
-          <p className="text-sm text-gray-500">Loading clients...</p>
-        </div>
+      <div className="flex justify-center items-center p-16">
+        <Loader className="h-8 w-8 animate-spin text-leadly-purple" />
       </div>
     );
   }
 
   return (
-    <div className="bg-white">
-      <div className="p-4 border-b">
-        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
-          <div className="relative w-full sm:w-auto">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
-            <Input
-              placeholder="Search clients..."
-              className="pl-10 pr-4 py-2 w-full sm:w-[300px] bg-white border-gray-200 focus:border-leadly-purple focus:ring-1 focus:ring-leadly-purple"
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-            />
-          </div>
-          <div className="flex flex-col sm:flex-row gap-2 w-full sm:w-auto">
-            <Select value={teamMember} onValueChange={setTeamMember}>
-              <SelectTrigger className="w-full sm:w-[180px] bg-white border-gray-200">
-                <div className="flex items-center gap-2">
-                  <User className="h-4 w-4 text-gray-500" />
-                  <SelectValue placeholder="All Team Members" />
-                </div>
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="all">All Team Members</SelectItem>
-                <SelectItem value="alex">Alex</SelectItem>
-                <SelectItem value="sarah">Sarah</SelectItem>
-                <SelectItem value="mike">Mike</SelectItem>
-              </SelectContent>
-            </Select>
-            
-            <Button 
-              variant="outline" 
-              className="w-full sm:w-auto border-gray-200 text-gray-700 hover:bg-gray-50"
-            >
-              <Filter className="h-4 w-4 mr-2 text-gray-500" />
-              Advanced Filter
-            </Button>
-            
-            <Button 
-              className="w-full sm:w-auto bg-leadly-purple hover:bg-leadly-dark-purple text-white"
-              onClick={handleAddNewClient}
-            >
-              <Plus className="h-4 w-4 mr-2" />
-              Add New Client
-            </Button>
-          </div>
+    <div className="bg-white min-h-[420px] flex flex-col">
+      {/* Actions Row */}
+      <div className="flex flex-col sm:flex-row gap-3 items-stretch sm:items-center pb-5 border-b border-gray-100 mb-0">
+        <div className="flex-1 flex items-center relative">
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-leadly-purple" />
+          <Input
+            placeholder="Search clients..."
+            className="pl-10 pr-4 py-2 w-full rounded-md bg-gray-50 border border-gray-200 text-gray-900 placeholder:text-gray-400 focus:border-leadly-purple focus:ring-1 focus:ring-leadly-purple"
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+          />
         </div>
-      </div>
-
-      <div className="overflow-x-auto">
-        {clients?.length === 0 ? (
-          <div className="py-16 px-4 flex flex-col items-center justify-center text-center border-b">
-            <div className="bg-leadly-soft-purple/30 rounded-full p-6 mb-4">
-              <UserPlus className="h-10 w-10 text-leadly-purple" />
+        <Select value={teamMember} onValueChange={setTeamMember}>
+          <SelectTrigger className="w-full sm:w-[170px] bg-gray-50 border border-gray-200 rounded-md focus:ring-leadly-purple">
+            <div className="flex items-center gap-2">
+              <User className="h-4 w-4 text-leadly-purple" />
+              <SelectValue placeholder="All Team Members" />
             </div>
-            <h3 className="text-lg font-medium mb-2 text-gray-800">No clients found</h3>
-            <p className="text-gray-500 max-w-md mb-6">
-              Add your first client to start tracking your sales pipeline and grow your business.
-            </p>
-            <Button 
-              onClick={handleAddNewClient}
-              className="bg-leadly-purple hover:bg-leadly-dark-purple text-white"
-            >
-              <Plus className="h-4 w-4 mr-2" />
-              Add Your First Client
-            </Button>
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="all">All Team Members</SelectItem>
+            <SelectItem value="alex">Alex</SelectItem>
+            <SelectItem value="sarah">Sarah</SelectItem>
+            <SelectItem value="mike">Mike</SelectItem>
+          </SelectContent>
+        </Select>
+        <Button
+          variant="outline"
+          className="w-full sm:w-auto border border-gray-200 text-leadly-purple font-medium bg-gray-50 hover:bg-leadly-soft-purple"
+        >
+          <Filter className="h-4 w-4 mr-2 text-leadly-purple" />
+          Advanced Filter
+        </Button>
+        <Button
+          className="w-full sm:w-auto bg-leadly-purple hover:bg-leadly-dark-purple text-white font-semibold"
+          onClick={handleAddNewClient}
+        >
+          <Plus className="h-4 w-4 mr-1" />
+          Add New Client
+        </Button>
+      </div>
+      {/* Empty state */}
+      {(!clients || clients.length === 0) && (
+        <div className="flex-1 flex flex-col justify-center items-center py-10">
+          <div className="bg-leadly-soft-purple/50 rounded-full p-5 mb-3">
+            <UserPlus className="h-10 w-10 text-leadly-purple opacity-70" />
           </div>
-        ) : (
+          <div className="text-lg font-semibold mb-2 text-gray-700">No clients found</div>
+          <p className="text-gray-400 max-w-md text-center mb-5">
+            Add your first client to start tracking your sales pipeline and grow your business.
+          </p>
+          <Button
+            className="bg-leadly-purple hover:bg-leadly-dark-purple text-white font-semibold px-6 py-2"
+            onClick={handleAddNewClient}
+          >
+            <Plus className="h-4 w-4 mr-2" />
+            Add Your First Client
+          </Button>
+        </div>
+      )}
+      {/* Table */}
+      {clients && clients.length > 0 && (
+        <div className="overflow-x-auto mt-5">
           <Table>
-            <TableHeader className="bg-gray-50 border-b">
+            <TableHeader className="bg-leadly-soft-purple border-y border-gray-100">
               <TableRow>
-                <TableHead className="font-semibold text-gray-700">Name</TableHead>
-                <TableHead className="font-semibold text-gray-700">Details</TableHead>
-                <TableHead className="font-semibold text-gray-700">Last Activity</TableHead>
-                <TableHead className="font-semibold text-gray-700 cursor-pointer">
-                  <div className="flex items-center">
-                    Date Added
-                    <ArrowDown className="ml-2 h-4 w-4 text-leadly-purple" />
-                  </div>
+                <TableHead className="font-semibold text-gray-800 text-base py-3">Name</TableHead>
+                <TableHead className="font-semibold text-gray-800 text-base py-3">Details</TableHead>
+                <TableHead className="font-semibold text-gray-800 text-base py-3">Last Activity</TableHead>
+                <TableHead className="font-semibold text-gray-800 text-base py-3">
+                  Date Added
                 </TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
               {clients?.map((client) => (
-                <TableRow 
-                  key={client.id} 
-                  className="cursor-pointer transition-colors hover:bg-gray-50"
+                <TableRow
+                  key={client.id}
+                  className="cursor-pointer transition-colors hover:bg-leadly-soft-purple/40"
                 >
                   <TableCell className="font-medium text-leadly-purple">{client.name}</TableCell>
                   <TableCell className="text-gray-600">{client.details || 'No details'}</TableCell>
                   <TableCell>
                     <div className="flex items-center text-gray-600">
-                      <CalendarDays className="h-4 w-4 mr-2 text-gray-400" />
-                      {new Date(client.last_activity).toLocaleDateString()}
+                      {client.last_activity
+                        ? new Date(client.last_activity).toLocaleDateString()
+                        : "No recent activity"}
                     </div>
                   </TableCell>
                   <TableCell className="text-gray-600">{new Date(client.date_added).toLocaleDateString()}</TableCell>
@@ -199,10 +187,12 @@ const ClientList = ({ filter = 'all' }: ClientListProps) => {
               ))}
             </TableBody>
           </Table>
-        )}
-      </div>
+        </div>
+      )}
     </div>
   );
 };
 
 export default ClientList;
+
+// NOTE: This file is now quite long. After reviewing this, consider splitting it into smaller components for scalability and maintainability.
