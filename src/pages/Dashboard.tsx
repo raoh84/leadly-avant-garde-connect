@@ -6,6 +6,7 @@ import DashboardNavbar from '@/components/dashboard/DashboardNavbar';
 import ClientTabs from '@/components/clients/ClientTabs';
 import TeamMembers from '@/components/team/TeamMembers';
 import { useToast } from '@/hooks/use-toast';
+import { LanguageProvider } from '@/contexts/LanguageContext';
 
 const Dashboard = () => {
   const navigate = useNavigate();
@@ -45,19 +46,21 @@ const Dashboard = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      <DashboardNavbar />
-      <div className="container mx-auto px-4 py-6">
-        <div className="grid gap-6 md:grid-cols-3">
-          <div className="md:col-span-2">
-            <ClientTabs />
-          </div>
-          <div>
-            <TeamMembers />
+    <LanguageProvider>
+      <div className="min-h-screen bg-gray-50">
+        <DashboardNavbar />
+        <div className="container mx-auto px-4 py-6">
+          <div className="grid gap-6 md:grid-cols-3">
+            <div className="md:col-span-2">
+              <ClientTabs />
+            </div>
+            <div>
+              <TeamMembers />
+            </div>
           </div>
         </div>
       </div>
-    </div>
+    </LanguageProvider>
   );
 };
 

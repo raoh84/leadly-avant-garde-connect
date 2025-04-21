@@ -8,9 +8,25 @@ import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
 
 export const UserProfile = () => {
-  const { t } = useLanguage();
   const navigate = useNavigate();
   const { toast } = useToast();
+  // Get language context safely
+  let t: (key: string) => string;
+  try {
+    const langContext = useLanguage();
+    t = langContext.t;
+  } catch (error) {
+    // Fallback if the language context is not available
+    t = (key: string) => {
+      // Default translations for critical text
+      const defaults: Record<string, string> = {
+        'nav.logout': 'Logout',
+        'auth.logoutSuccess': 'Successfully logged out',
+        'auth.error': 'Error'
+      };
+      return defaults[key] || key;
+    };
+  }
 
   const handleLogout = async () => {
     try {

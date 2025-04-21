@@ -2,10 +2,8 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { UserProfile } from '@/components/UserProfile';
-import { supabase } from '@/integrations/supabase/client';
 
 const DashboardNavbar = () => {
   const [activeTab, setActiveTab] = useState("clients");
