@@ -15,17 +15,37 @@ const DashboardNavbar = () => {
   };
 
   return (
-    <div className="border-b">
-      <div className="container mx-auto px-4 py-2">
+    <div className="border-b bg-white shadow-sm">
+      <div className="container mx-auto px-4 py-3">
         <div className="flex items-center justify-between">
           <div className="flex items-center space-x-2">
             <h2 className="text-2xl font-bold text-leadly-purple">Leadly</h2>
             <Tabs value={activeTab} onValueChange={handleTabChange} className="ml-6">
-              <TabsList>
-                <TabsTrigger value="clients">Clients</TabsTrigger>
-                <TabsTrigger value="content">Content</TabsTrigger>
-                <TabsTrigger value="team">Team</TabsTrigger>
-                <TabsTrigger value="integrations">Integrations</TabsTrigger>
+              <TabsList className="bg-gray-100">
+                <TabsTrigger 
+                  value="clients"
+                  className="data-[state=active]:bg-leadly-purple data-[state=active]:text-white"
+                >
+                  Clients
+                </TabsTrigger>
+                <TabsTrigger 
+                  value="content"
+                  className="data-[state=active]:bg-leadly-purple data-[state=active]:text-white"
+                >
+                  Content
+                </TabsTrigger>
+                <TabsTrigger 
+                  value="team"
+                  className="data-[state=active]:bg-leadly-purple data-[state=active]:text-white"
+                >
+                  Team
+                </TabsTrigger>
+                <TabsTrigger 
+                  value="integrations"
+                  className="data-[state=active]:bg-leadly-purple data-[state=active]:text-white"
+                >
+                  Integrations
+                </TabsTrigger>
               </TabsList>
             </Tabs>
           </div>
