@@ -9,6 +9,8 @@ import Auth from "./pages/Auth";
 import Settings from "./pages/Settings";
 import NotFound from "./pages/NotFound";
 import Dashboard from "./pages/Dashboard";
+import Integrations from "./pages/Integrations";
+import Team from "./pages/Team";
 import { LanguageProvider } from "@/contexts/LanguageContext";
 
 const queryClient = new QueryClient();
@@ -25,6 +27,10 @@ const App = () => (
             <Route path="/auth" element={<Auth />} />
             <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/dashboard/:tab" element={<Dashboard />} />
+            <Route path="/integrations" element={<Integrations />} />
+            <Route path="/integrations/:tab" element={<Integrations />} />
+            <Route path="/team" element={<Team />} />
+            <Route path="/team/:tab" element={<Team />} />
             <Route path="/settings" element={<Settings />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
