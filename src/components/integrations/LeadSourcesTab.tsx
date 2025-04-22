@@ -2,7 +2,7 @@
 import React, { useState } from 'react';
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { Search, Settings, Facebook, Linkedin, TiktokLogo, Circle } from 'lucide-react';
+import { Search, Settings, Facebook, Linkedin, Circle, Hash } from 'lucide-react';
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { useToast } from "@/hooks/use-toast";
@@ -196,7 +196,7 @@ const LeadSourcesTab = () => {
             <div className="p-5">
               <div className="flex items-center gap-3 mb-3">
                 <div className="bg-black rounded-full p-2">
-                  <TiktokLogo className="h-5 w-5 text-white" />
+                  <Hash className="h-5 w-5 text-white" />
                 </div>
                 <h3 className="font-semibold text-gray-800">TikTok</h3>
               </div>

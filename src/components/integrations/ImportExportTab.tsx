@@ -2,7 +2,7 @@
 import React from 'react';
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import { Import, Export } from 'lucide-react';
+import { Import, ArrowUpDown } from 'lucide-react';
 import { useToast } from "@/hooks/use-toast";
 
 const ImportExportTab = () => {
@@ -51,7 +51,7 @@ const ImportExportTab = () => {
         <CardContent className="p-6">
           <div className="flex items-center gap-4 mb-4">
             <div className="bg-leadly-soft-purple rounded-full p-3">
-              <Export className="h-6 w-6 text-leadly-purple" />
+              <ArrowUpDown className="h-6 w-6 text-leadly-purple" />
             </div>
             <h3 className="font-semibold text-lg text-gray-800">Export Client List</h3>
           </div>

@@ -5,11 +5,11 @@ import { Button } from "@/components/ui/button";
 import { UserProfile } from '@/components/UserProfile';
 import { Menu, X, Users, Settings, Link as LinkIcon } from 'lucide-react';
 import { useLanguage } from '@/contexts/LanguageContext';
-import { useMediaQuery } from '@/hooks/use-mobile';
+import { useIsMobile } from '@/hooks/use-mobile';
 
 const DashboardNavbar = () => {
   const [isOpen, setIsOpen] = useState(false);
-  const isMobile = useMediaQuery('(max-width: 768px)');
+  const isMobile = useIsMobile();
   const location = useLocation();
   
   // Try to use language context, but provide fallback if not available

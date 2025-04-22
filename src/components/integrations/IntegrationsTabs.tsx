@@ -1,10 +1,9 @@
-
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { Search, Settings, Import, Export } from 'lucide-react';
+import { Search, Settings, Import, ArrowUpDown } from 'lucide-react';
 import LeadSourcesTab from './LeadSourcesTab';
 import ImportExportTab from './ImportExportTab';
 
