@@ -30,13 +30,13 @@ const Testimonials = () => {
   ];
   
   return (
-    <section className="py-20 bg-white">
+    <section className="py-24 bg-white">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="text-center mb-16">
-          <h2 className="text-3xl sm:text-4xl font-bold mb-4 gradient-text inline-block">
+        <div className="text-center mb-20">
+          <h2 className="font-serif text-3xl sm:text-4xl font-bold mb-6 gradient-text inline-block">
             {t('testimonials.title')}
           </h2>
-          <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+          <p className="text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed">
             {t('testimonials.subtitle')}
           </p>
         </div>
@@ -45,24 +45,22 @@ const Testimonials = () => {
           {testimonials.map((testimonial, index) => (
             <div
               key={index}
-              className="bg-white p-6 rounded-xl shadow-sm border border-gray-100 card-hover"
+              className="bg-gray-50 p-8 rounded-2xl shadow-md transition-all duration-300 hover:shadow-xl hover:-translate-y-1"
             >
-              <div className="mb-6">
-                <div className="flex items-center mb-4">
-                  <div className="h-4 w-4 bg-leadly-purple rounded-full mr-1"></div>
-                  <div className="h-4 w-4 bg-leadly-purple rounded-full mr-1"></div>
-                  <div className="h-4 w-4 bg-leadly-purple rounded-full"></div>
+              <div className="mb-8">
+                <div className="flex items-center mb-6">
+                  <div className="h-2 w-16 bg-leadly-purple rounded-full"></div>
                 </div>
-                <p className="text-gray-700 italic">{testimonial.content}</p>
+                <p className="text-gray-700 leading-relaxed text-lg">{testimonial.content}</p>
               </div>
               <div className="flex items-center">
                 <img
                   src={testimonial.avatar}
                   alt={testimonial.author}
-                  className="h-12 w-12 rounded-full mr-4"
+                  className="h-14 w-14 rounded-full ring-2 ring-leadly-purple/20 mr-4"
                 />
                 <div>
-                  <h4 className="font-semibold">{testimonial.author}</h4>
+                  <h4 className="font-semibold text-gray-900">{testimonial.author}</h4>
                   <p className="text-sm text-gray-600">{testimonial.title}</p>
                 </div>
               </div>

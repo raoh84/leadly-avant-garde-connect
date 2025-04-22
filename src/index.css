@@ -73,13 +73,13 @@
   }
 
   body {
-    @apply bg-background text-foreground;
+    @apply bg-background text-foreground antialiased;
   }
 }
 
 @layer components {
   .hero-gradient {
-    @apply bg-gradient-to-br from-leadly-purple/10 via-leadly-soft-purple to-leadly-soft-blue/30;
+    @apply bg-gradient-to-br from-leadly-purple/5 via-leadly-soft-purple/10 to-leadly-soft-blue/5;
   }
   
   .card-hover {
@@ -87,6 +87,12 @@
   }
 
   .gradient-text {
-    @apply bg-gradient-to-r from-leadly-purple to-leadly-dark-purple bg-clip-text text-transparent;
+    @apply bg-gradient-to-r from-leadly-purple via-leadly-dark-purple to-leadly-purple bg-clip-text text-transparent;
+  }
+}
+
+@layer utilities {
+  .shadow-3xl {
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.15);
   }
 }

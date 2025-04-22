@@ -8,21 +8,21 @@ const Hero = () => {
   const { t } = useLanguage();
 
   return (
-    <div className="hero-gradient">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-32 pb-24">
-        <div className="lg:flex lg:items-center lg:justify-between">
-          <div className="lg:w-1/2 mb-10 lg:mb-0">
-            <h1 className="text-4xl sm:text-5xl md:text-6xl font-extrabold tracking-tight gradient-text mb-6">
+    <div className="hero-gradient relative overflow-hidden">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24 lg:py-32">
+        <div className="lg:flex lg:items-center lg:justify-between lg:gap-x-16">
+          <div className="lg:w-1/2 mb-12 lg:mb-0">
+            <h1 className="font-serif text-4xl sm:text-5xl md:text-6xl font-bold tracking-tight gradient-text mb-8 leading-[1.15]">
               {t('hero.title')}
             </h1>
-            <p className="text-xl text-gray-600 mb-10 max-w-2xl">
+            <p className="text-xl text-gray-600 mb-12 max-w-2xl leading-relaxed">
               {t('hero.subtitle')}
             </p>
-            <div className="flex flex-col sm:flex-row gap-4">
-              <Button size="lg" className="bg-leadly-purple hover:bg-leadly-purple/90 text-lg">
+            <div className="flex flex-col sm:flex-row gap-5">
+              <Button size="lg" className="bg-leadly-purple hover:bg-leadly-purple/90 text-lg px-8 py-6 h-auto transition-all duration-300 hover:translate-y-[-2px] hover:shadow-lg shadow-leadly-purple/20">
                 {t('hero.cta1')}
               </Button>
-              <Button size="lg" variant="outline" className="group border-leadly-purple text-leadly-purple hover:bg-leadly-purple/10 text-lg">
+              <Button size="lg" variant="outline" className="group border-2 border-leadly-purple text-leadly-purple hover:bg-leadly-purple/10 text-lg px-8 py-6 h-auto transition-all duration-300 hover:translate-y-[-2px]">
                 {t('hero.cta2')}
                 <ArrowRight className="ml-2 h-5 w-5 transition-transform group-hover:translate-x-1" />
               </Button>
@@ -31,12 +31,12 @@ const Hero = () => {
           <div className="lg:w-1/2 flex justify-center">
             <div className="relative w-full max-w-lg">
               <div className="absolute -top-4 -left-4 w-72 h-72 bg-leadly-purple/30 rounded-full mix-blend-multiply filter blur-xl opacity-70 animate-float"></div>
-              <div className="absolute -bottom-8 right-0 w-72 h-72 bg-leadly-light-purple/30 rounded-full mix-blend-multiply filter blur-xl opacity-70 animate-float animation-delay-2000"></div>
+              <div className="absolute -bottom-8 right-0 w-72 h-72 bg-leadly-light-purple/30 rounded-full mix-blend-multiply filter blur-xl opacity-70 animate-float" style={{ animationDelay: '2s' }}></div>
               <div className="relative">
                 <img 
                   src="/placeholder.svg" 
-                  alt="Leadly Dashboard" 
-                  className="rounded-xl shadow-xl border border-gray-200"
+                  alt="Leadly Dashboard"
+                  className="rounded-2xl shadow-2xl border border-gray-200/50 transition-all duration-300 hover:shadow-3xl hover:scale-[1.02]"
                 />
               </div>
             </div>

@@ -1,4 +1,3 @@
-
 // Update the tailwind.config.ts colors section to include leadly-soft-purple and leadly-soft-blue
 
 import { fontFamily } from "tailwindcss/defaultTheme";
@@ -75,7 +74,8 @@ export default {
         "even-lg": "0 0 8px rgba(0, 0, 0, 0.1)",
       },
       fontFamily: {
-        sans: ["var(--font-sans)", ...fontFamily.sans],
+        sans: ['Inter', ...fontFamily.sans],
+        serif: ['Playfair Display', 'serif'],
       },
       keyframes: {
         "accordion-down": {
@@ -86,10 +86,15 @@ export default {
           from: { height: "var(--radix-accordion-content-height)" },
           to: { height: "0" },
         },
+        float: {
+          '0%, 100%': { transform: 'translateY(0)' },
+          '50%': { transform: 'translateY(-20px)' },
+        },
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
+        'float': 'float 6s ease-in-out infinite',
       },
     },
   },
