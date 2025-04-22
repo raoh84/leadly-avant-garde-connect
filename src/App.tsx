@@ -1,4 +1,3 @@
-
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -11,6 +10,9 @@ import NotFound from "./pages/NotFound";
 import Dashboard from "./pages/Dashboard";
 import Integrations from "./pages/Integrations";
 import Team from "./pages/Team";
+import LeadsPage from "./pages/Leads";
+import TemplatesPage from "./pages/Templates";
+import SubscribePage from "./pages/Subscribe";
 import { LanguageProvider } from "@/contexts/LanguageContext";
 
 const queryClient = new QueryClient();
@@ -27,6 +29,9 @@ const App = () => (
             <Route path="/auth" element={<Auth />} />
             <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/dashboard/:tab" element={<Dashboard />} />
+            <Route path="/leads" element={<LeadsPage />} />
+            <Route path="/templates" element={<TemplatesPage />} />
+            <Route path="/subscribe" element={<SubscribePage />} />
             <Route path="/integrations" element={<Integrations />} />
             <Route path="/integrations/:tab" element={<Integrations />} />
             <Route path="/team" element={<Team />} />

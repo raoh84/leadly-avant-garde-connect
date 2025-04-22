@@ -1,4 +1,3 @@
-
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { supabase } from '@/integrations/supabase/client';
@@ -7,6 +6,7 @@ import ClientTabs from '@/components/clients/ClientTabs';
 import TeamMembers from '@/components/team/TeamMembers';
 import { useToast } from '@/hooks/use-toast';
 import { LanguageProvider } from '@/contexts/LanguageContext';
+import { Link } from "react-router-dom";
 
 const Dashboard = () => {
   const navigate = useNavigate();
@@ -50,6 +50,11 @@ const Dashboard = () => {
       <div className="min-h-screen bg-gray-50">
         <DashboardNavbar />
         <div className="container mx-auto px-4 py-6">
+          <div className="mb-4 flex gap-3">
+            <Link to="/leads"><Button>Leads</Button></Link>
+            <Link to="/templates"><Button>Templates</Button></Link>
+            <Link to="/subscribe"><Button>Subscription</Button></Link>
+          </div>
           <div className="grid gap-6 md:grid-cols-3">
             <div className="md:col-span-2">
               <ClientTabs />
