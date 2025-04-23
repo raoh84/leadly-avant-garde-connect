@@ -59,6 +59,9 @@ const Dashboard = () => {
             <Button asChild variant="outline">
               <Link to="/subscribe">Subscription</Link>
             </Button>
+            <Button asChild variant="outline">
+              <Link to="/settings">Settings</Link>
+            </Button>
           </div>
           <div className="md:col-span-2">
             <ClientTabs />
