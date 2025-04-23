@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { supabase } from '@/integrations/supabase/client';
@@ -69,10 +68,17 @@ export const AuthForm = () => {
 
   return (
     <form onSubmit={handleSubmit} className="mt-8 space-y-6">
+      <div className="text-center">
+        <h2 className="mt-6 text-3xl font-bold text-gray-900">Welcome to Leadly</h2>
+        <p className="mt-2 text-sm text-gray-600">
+          Your journey to better lead management starts here
+        </p>
+      </div>
+
       <div className="rounded-md shadow-sm space-y-4">
         {isSignUp && (
           <div>
-            <Label htmlFor="fullName">{t('auth.fullName')}</Label>
+            <Label htmlFor="fullName">Full Name</Label>
             <Input
               id="fullName"
               type="text"
@@ -84,7 +90,7 @@ export const AuthForm = () => {
           </div>
         )}
         <div>
-          <Label htmlFor="email">{t('auth.email')}</Label>
+          <Label htmlFor="email">Email address</Label>
           <Input
             id="email"
             type="email"
@@ -95,7 +101,7 @@ export const AuthForm = () => {
           />
         </div>
         <div>
-          <Label htmlFor="password">{t('auth.password')}</Label>
+          <Label htmlFor="password">Password</Label>
           <Input
             id="password"
             type="password"
@@ -108,7 +114,7 @@ export const AuthForm = () => {
       </div>
 
       <Button type="submit" className="w-full bg-leadly-purple hover:bg-leadly-purple/90" disabled={isLoading}>
-        {isLoading ? t('auth.processing') : (isSignUp ? t('auth.signUp') : t('auth.signIn'))}
+        {isLoading ? "Processing..." : (isSignUp ? "Create Account" : "Sign In")}
       </Button>
 
       <div className="text-center">
@@ -117,7 +123,7 @@ export const AuthForm = () => {
           onClick={() => setIsSignUp(!isSignUp)}
           className="text-sm text-leadly-purple hover:underline"
         >
-          {isSignUp ? t('auth.alreadyHaveAccount') : t('auth.needAccount')}
+          {isSignUp ? "Already have an account? Sign in" : "Need an account? Sign up"}
         </button>
       </div>
     </form>

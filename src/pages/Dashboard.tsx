@@ -52,10 +52,16 @@ const Dashboard = () => {
       <div className="min-h-screen bg-gray-50">
         <DashboardNavbar />
         <div className="container mx-auto px-4 py-6">
-          <div className="mb-4 flex gap-3">
-            <Link to="/leads"><Button>Leads</Button></Link>
-            <Link to="/templates"><Button>Templates</Button></Link>
-            <Link to="/subscribe"><Button>Subscription</Button></Link>
+          <div className="flex flex-wrap gap-3 mb-4">
+            <Link to="/leads">
+              <Button className="w-full sm:w-auto">Leads</Button>
+            </Link>
+            <Link to="/templates">
+              <Button className="w-full sm:w-auto">Templates</Button>
+            </Link>
+            <Link to="/subscribe">
+              <Button className="w-full sm:w-auto">Subscription</Button>
+            </Link>
           </div>
           <div className="grid gap-6 md:grid-cols-3">
             <div className="md:col-span-2">
