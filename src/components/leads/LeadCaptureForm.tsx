@@ -1,16 +1,16 @@
 
 import React, { useState } from "react";
-import { supabase } from "@/integrations/supabase/client";
+import { supabase } from '@/integrations/supabase/client';
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useToast } from "@/hooks/use-toast";
-import { useLanguage } from "@/contexts/LanguageContext";
+import { useLanguage } from '@/contexts/LanguageContext';
 
-// Validate email and phone simply
 function validateEmail(email: string) {
   return /\S+@\S+\.\S+/.test(email);
 }
+
 function validatePhone(phone: string) {
   return /^\+?\d{9,}$/.test(phone);
 }
@@ -30,34 +30,35 @@ export function LeadCaptureForm() {
     if (!values.name || !validateEmail(values.email) || !validatePhone(values.phone)) {
       toast({
         variant: "destructive",
-        title: t("lead.form.invalid") || "Please fill all fields correctly.",
+        title: "Please fill all fields correctly",
       });
       return;
     }
 
     setLoading(true);
     try {
-      const user = (await supabase.auth.getUser()).data.user;
-      if (!user) throw new Error("Not authenticated");
-      // For demo: Assign to the org/owner themselves, production logic may differ
-      const orgRes = await supabase.from("organizations").select("id").eq("owner_id", user.id).maybeSingle();
-      const orgId = orgRes.data?.id;
+      const { data: { session } } = await supabase.auth.getSession();
+      const userId = session?.user?.id;
+      
       const { error } = await supabase.from("leads").insert({
         ...values,
-        created_by: user.id,
-        organization_id: orgId,
+        created_by: userId,
+        status: 'new'
       });
+
       if (error) throw error;
+
       toast({
-        title: t("lead.form.success") || "Lead captured!",
-        description: t("lead.form.saved") || "A new lead was saved and notifies the team.",
+        title: "Lead captured successfully!",
+        description: "The team will be notified.",
       });
+      
       setValues({ name: "", email: "", phone: "" });
-    } catch (e: any) {
+    } catch (error: any) {
       toast({
         variant: "destructive",
-        title: t("lead.form.errtitle") || "Error capturing lead",
-        description: e.message || "",
+        title: "Error capturing lead",
+        description: error.message,
       });
     } finally {
       setLoading(false);
@@ -65,22 +66,52 @@ export function LeadCaptureForm() {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="bg-white rounded-xl shadow-md p-6 space-y-4">
+    <form onSubmit={handleSubmit} className="space-y-4 bg-white rounded-lg shadow-sm p-6">
       <div>
-        <Label htmlFor="name">{t("lead.form.name") || "Name"}</Label>
-        <Input name="name" id="name" value={values.name} onChange={handleChange} required />
+        <Label htmlFor="name">Name</Label>
+        <Input
+          id="name"
+          name="name"
+          value={values.name}
+          onChange={handleChange}
+          className="mt-1"
+          required
+        />
       </div>
+      
       <div>
-        <Label htmlFor="email">{t("lead.form.email") || "Email"}</Label>
-        <Input name="email" id="email" type="email" value={values.email} onChange={handleChange} required />
+        <Label htmlFor="email">Email</Label>
+        <Input
+          id="email"
+          name="email"
+          type="email"
+          value={values.email}
+          onChange={handleChange}
+          className="mt-1"
+          required
+        />
       </div>
+      
       <div>
-        <Label htmlFor="phone">{t("lead.form.phone") || "Phone"}</Label>
-        <Input name="phone" id="phone" type="tel" value={values.phone} onChange={handleChange} required />
+        <Label htmlFor="phone">Phone</Label>
+        <Input
+          id="phone"
+          name="phone"
+          type="tel"
+          value={values.phone}
+          onChange={handleChange}
+          className="mt-1"
+          required
+        />
       </div>
-      <Button type="submit" className="w-full bg-leadly-purple" disabled={loading}>
-        {loading ? t("lead.form.saving") || "Saving..." : t("lead.form.submit") || "Submit Lead"}
+
+      <Button 
+        type="submit" 
+        className="w-full bg-leadly-purple hover:bg-leadly-purple/90" 
+        disabled={loading}
+      >
+        {loading ? "Submitting..." : "Submit Lead"}
       </Button>
     </form>
   );
-}
+};

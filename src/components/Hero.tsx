@@ -1,49 +1,49 @@
 
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Button } from "@/components/ui/button";
 import { useLanguage } from '@/contexts/LanguageContext';
-import { ArrowRight } from 'lucide-react';
 
 const Hero = () => {
+  const navigate = useNavigate();
   const { t } = useLanguage();
 
   return (
-    <div className="hero-gradient relative overflow-hidden">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24 lg:py-32">
-        <div className="lg:flex lg:items-center lg:justify-between lg:gap-x-16">
-          <div className="lg:w-1/2 mb-12 lg:mb-0">
-            <h1 className="font-serif text-4xl sm:text-5xl md:text-6xl font-bold tracking-tight gradient-text mb-8 leading-[1.15]">
-              {t('hero.title')}
-            </h1>
-            <p className="text-xl text-gray-600 mb-12 max-w-2xl leading-relaxed">
-              {t('hero.subtitle')}
-            </p>
-            <div className="flex flex-col sm:flex-row gap-5">
-              <Button size="lg" className="bg-leadly-purple hover:bg-leadly-purple/90 text-lg px-8 py-6 h-auto transition-all duration-300 hover:translate-y-[-2px] hover:shadow-lg shadow-leadly-purple/20">
-                {t('hero.cta1')}
-              </Button>
-              <Button size="lg" variant="outline" className="group border-2 border-leadly-purple text-leadly-purple hover:bg-leadly-purple/10 text-lg px-8 py-6 h-auto transition-all duration-300 hover:translate-y-[-2px]">
-                {t('hero.cta2')}
-                <ArrowRight className="ml-2 h-5 w-5 transition-transform group-hover:translate-x-1" />
-              </Button>
-            </div>
-          </div>
-          <div className="lg:w-1/2 flex justify-center">
-            <div className="relative w-full max-w-lg">
-              <div className="absolute -top-4 -left-4 w-72 h-72 bg-leadly-purple/30 rounded-full mix-blend-multiply filter blur-xl opacity-70 animate-float"></div>
-              <div className="absolute -bottom-8 right-0 w-72 h-72 bg-leadly-light-purple/30 rounded-full mix-blend-multiply filter blur-xl opacity-70 animate-float" style={{ animationDelay: '2s' }}></div>
-              <div className="relative">
-                <img 
-                  src="/placeholder.svg" 
-                  alt="Leadly Dashboard"
-                  className="rounded-2xl shadow-2xl border border-gray-200/50 transition-all duration-300 hover:shadow-3xl hover:scale-[1.02]"
-                />
-              </div>
-            </div>
-          </div>
+    <header className="bg-gradient-to-b from-gray-50 to-white py-16 md:py-24">
+      <div className="container mx-auto px-4 md:px-6 text-center">
+        <h1 className="text-4xl md:text-6xl font-bold text-gray-900 mb-6">
+          {t('index.title')}
+        </h1>
+        <p className="text-lg md:text-xl text-gray-600 mb-8 max-w-2xl mx-auto">
+          {t('index.subtitle')}
+        </p>
+        <div className="flex flex-col md:flex-row gap-4 justify-center items-center">
+          <Button
+            onClick={() => navigate("/auth")}
+            className="w-full md:w-auto bg-leadly-purple hover:bg-leadly-purple/90"
+            size="lg"
+          >
+            Get Started Free
+          </Button>
+          <Button
+            onClick={() => navigate("/subscribe")}
+            variant="outline"
+            className="w-full md:w-auto"
+            size="lg"
+          >
+            View Pricing
+          </Button>
+          <Button
+            variant="outline"
+            onClick={() => window.location.href = "mailto:sales@leadly.com"}
+            className="w-full md:w-auto"
+            size="lg"
+          >
+            Contact Sales
+          </Button>
         </div>
       </div>
-    </div>
+    </header>
   );
 };
 
