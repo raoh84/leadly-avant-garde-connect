@@ -1,8 +1,9 @@
+
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import Navbar from '@/components/Navbar';
 import Pricing from '@/components/Pricing';
-import Faq from '@/components/Faq';
+import FAQ from '@/components/FAQ';
 import Footer from '@/components/Footer';
 import { Button } from "@/components/ui/button";
 import { useLanguage } from '@/contexts/LanguageContext';
@@ -61,7 +62,7 @@ const Index = () => {
       </section>
 
       <section id="faq" className="py-16">
-        <Faq />
+        <FAQ />
       </section>
 
       <Footer />
