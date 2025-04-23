@@ -1,13 +1,10 @@
-
 import React, { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import { supabase } from '@/integrations/supabase/client';
 import DashboardNavbar from '@/components/dashboard/DashboardNavbar';
 import ClientTabs from '@/components/clients/ClientTabs';
-import TeamMembers from '@/components/team/TeamMembers';
 import { useToast } from '@/hooks/use-toast';
 import { LanguageProvider } from '@/contexts/LanguageContext';
-import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 
 const Dashboard = () => {
@@ -24,7 +21,6 @@ const Dashboard = () => {
           return;
         }
         
-        // User is authenticated, continue loading the dashboard
         setIsLoading(false);
       } catch (error: any) {
         toast({
@@ -53,23 +49,18 @@ const Dashboard = () => {
         <DashboardNavbar />
         <div className="container mx-auto px-4 py-6">
           <div className="flex flex-wrap gap-3 mb-4">
-            <Link to="/leads">
-              <Button className="w-full sm:w-auto">Leads</Button>
-            </Link>
-            <Link to="/templates">
-              <Button className="w-full sm:w-auto">Templates</Button>
-            </Link>
-            <Link to="/subscribe">
-              <Button className="w-full sm:w-auto">Subscription</Button>
-            </Link>
+            <Button asChild variant="outline">
+              <Link to="/leads">Leads</Link>
+            </Button>
+            <Button asChild variant="outline">
+              <Link to="/templates">Templates</Link>
+            </Button>
+            <Button asChild variant="outline">
+              <Link to="/pricing">Subscription</Link>
+            </Button>
           </div>
-          <div className="grid gap-6 md:grid-cols-3">
-            <div className="md:col-span-2">
-              <ClientTabs />
-            </div>
-            <div>
-              <TeamMembers />
-            </div>
+          <div className="md:col-span-2">
+            <ClientTabs />
           </div>
         </div>
       </div>

@@ -2,10 +2,18 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Button } from "@/components/ui/button";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import { useLanguage } from '@/contexts/LanguageContext';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
+import { Settings, User, CreditCard, Smartphone, Book, MessageCircle, LogOut } from 'lucide-react';
 
 export const UserProfile = () => {
   const navigate = useNavigate();
@@ -13,7 +21,6 @@ export const UserProfile = () => {
   const langContext = useLanguage();
   const t = langContext?.t ?? ((key: string) => key);
 
-  // Show user avatar & initials
   const [avatarUrl, setAvatarUrl] = useState<string | null>(null);
   const [initials, setInitials] = useState("U");
 
@@ -51,20 +58,57 @@ export const UserProfile = () => {
     }
   };
 
+  const handleNavigation = (path: string) => {
+    navigate(path);
+  };
+
   return (
-    <div className="flex items-center gap-4">
-      <Avatar className="h-9 w-9 border border-gray-200">
-        {avatarUrl ? (
-          <AvatarImage src={avatarUrl} alt="User Avatar" />
-        ) : (
-          <AvatarFallback className="bg-leadly-soft-purple text-leadly-purple font-bold">
-            {initials}
-          </AvatarFallback>
-        )}
-      </Avatar>
-      <Button variant="ghost" onClick={handleLogout} className="font-medium text-gray-700">
-        {t('nav.logout')}
-      </Button>
-    </div>
+    <DropdownMenu>
+      <DropdownMenuTrigger asChild>
+        <Avatar className="h-9 w-9 border border-gray-200 cursor-pointer">
+          {avatarUrl ? (
+            <AvatarImage src={avatarUrl} alt="User Avatar" />
+          ) : (
+            <AvatarFallback className="bg-leadly-soft-purple text-leadly-purple font-bold">
+              {initials}
+            </AvatarFallback>
+          )}
+        </Avatar>
+      </DropdownMenuTrigger>
+      <DropdownMenuContent className="w-56" align="end">
+        <DropdownMenuLabel>My Account</DropdownMenuLabel>
+        <DropdownMenuSeparator />
+        <DropdownMenuItem onClick={() => handleNavigation('/profile')}>
+          <User className="mr-2 h-4 w-4" />
+          <span>Profile</span>
+        </DropdownMenuItem>
+        <DropdownMenuItem onClick={() => handleNavigation('/settings')}>
+          <Settings className="mr-2 h-4 w-4" />
+          <span>Settings</span>
+        </DropdownMenuItem>
+        <DropdownMenuItem onClick={() => handleNavigation('/subscribe')}>
+          <CreditCard className="mr-2 h-4 w-4" />
+          <span>Subscription</span>
+        </DropdownMenuItem>
+        <DropdownMenuItem onClick={() => handleNavigation('/mobile-app')}>
+          <Smartphone className="mr-2 h-4 w-4" />
+          <span>Mobile App</span>
+        </DropdownMenuItem>
+        <DropdownMenuSeparator />
+        <DropdownMenuItem onClick={() => window.open('/guide', '_blank')}>
+          <Book className="mr-2 h-4 w-4" />
+          <span>User Guide</span>
+        </DropdownMenuItem>
+        <DropdownMenuItem onClick={() => window.open('/support', '_blank')}>
+          <MessageCircle className="mr-2 h-4 w-4" />
+          <span>Live Chat Support</span>
+        </DropdownMenuItem>
+        <DropdownMenuSeparator />
+        <DropdownMenuItem onClick={handleLogout}>
+          <LogOut className="mr-2 h-4 w-4" />
+          <span>Log out</span>
+        </DropdownMenuItem>
+      </DropdownMenuContent>
+    </DropdownMenu>
   );
 };
