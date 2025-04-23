@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
@@ -18,13 +19,16 @@ import {
   Search, 
   Filter, 
   User, 
-  UserPlus 
+  UserPlus,
+  Download,
+  Upload
 } from 'lucide-react';
-import { toast } from "@/hooks/use-toast";
+import { useToast } from "@/hooks/use-toast";
 import {
   Card,
   CardContent,
 } from "@/components/ui/card";
+import AddClientDialog from './AddClientDialog';
 
 type Client = {
   id: string;
@@ -42,8 +46,10 @@ interface ClientListProps {
 const ClientList = ({ filter = 'all' }: { filter?: string }) => {
   const [searchTerm, setSearchTerm] = useState('');
   const [teamMember, setTeamMember] = useState('all');
+  const [isAddClientDialogOpen, setIsAddClientDialogOpen] = useState(false);
+  const { toast } = useToast();
 
-  const { data: clients, isLoading } = useQuery({
+  const { data: clients, isLoading, refetch } = useQuery({
     queryKey: ['clients', filter, searchTerm, teamMember],
     queryFn: async () => {
       let query = supabase
@@ -76,10 +82,142 @@ const ClientList = ({ filter = 'all' }: { filter?: string }) => {
   });
 
   const handleAddNewClient = () => {
+    setIsAddClientDialogOpen(true);
+  };
+
+  const handleExportCSV = () => {
+    if (!clients || clients.length === 0) {
+      toast({
+        variant: "destructive",
+        title: "Export Failed",
+        description: "No clients to export"
+      });
+      return;
+    }
+
+    // Convert clients to CSV format
+    const headers = ['Name', 'Details', 'Status', 'Last Activity', 'Date Added'];
+    const csvContent = [
+      headers.join(','),
+      ...clients.map(client => [
+        `"${client.name || ''}"`,
+        `"${client.details || ''}"`,
+        `"${client.contact_status || ''}"`,
+        `"${client.last_activity ? new Date(client.last_activity).toLocaleDateString() : ''}"`,
+        `"${client.date_added ? new Date(client.date_added).toLocaleDateString() : ''}"`,
+      ].join(','))
+    ].join('\n');
+
+    // Create and download the CSV file
+    const blob = new Blob([csvContent], { type: 'text/csv' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = 'leadly-clients.csv';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    
     toast({
-      title: "Add new client",
-      description: "This feature is coming soon!",
+      title: "Export Successful",
+      description: `${clients.length} clients exported to CSV`
     });
+  };
+
+  const handleImportCSV = () => {
+    // Create a hidden file input
+    const input = document.createElement('input');
+    input.type = 'file';
+    input.accept = '.csv';
+    input.onchange = async (e) => {
+      const file = (e.target as HTMLInputElement).files?.[0];
+      if (!file) return;
+
+      const reader = new FileReader();
+      reader.onload = async (event) => {
+        try {
+          const csvContent = event.target?.result as string;
+          const rows = csvContent.split('\n');
+          const headers = rows[0].split(',');
+          
+          // Check if the CSV has the required header
+          if (!headers.includes('Name')) {
+            throw new Error('CSV file must contain a "Name" column');
+          }
+          
+          const nameIndex = headers.findIndex(h => h.trim() === 'Name');
+          const detailsIndex = headers.findIndex(h => h.trim() === 'Details');
+          
+          // Get the current user
+          const { data: { user } } = await supabase.auth.getUser();
+          
+          if (!user) {
+            throw new Error("User not authenticated");
+          }
+          
+          // Process each row starting from index 1 (skipping header)
+          let successCount = 0;
+          let failCount = 0;
+          
+          for (let i = 1; i < rows.length; i++) {
+            if (!rows[i].trim()) continue; // Skip empty rows
+            
+            const values = rows[i].split(',');
+            // Extract the name, removing quotes if present
+            let name = values[nameIndex]?.trim();
+            if (name) {
+              name = name.replace(/^"|"$/g, ''); // Remove surrounding quotes
+              
+              let details = '';
+              if (detailsIndex >= 0 && values[detailsIndex]) {
+                details = values[detailsIndex].replace(/^"|"$/g, '');
+              }
+              
+              const { error } = await supabase.from('clients').insert({
+                name,
+                details: details || null,
+                user_id: user.id,
+              });
+              
+              if (error) {
+                console.error(`Error importing row ${i}:`, error);
+                failCount++;
+              } else {
+                successCount++;
+              }
+            }
+          }
+          
+          if (successCount > 0) {
+            toast({
+              title: "Import Successful",
+              description: `${successCount} clients imported${failCount > 0 ? ` (${failCount} failed)` : ''}`
+            });
+            refetch(); // Refresh the client list
+          } else if (failCount > 0) {
+            toast({
+              variant: "destructive",
+              title: "Import Failed",
+              description: `All ${failCount} records failed to import`
+            });
+          } else {
+            toast({
+              variant: "destructive",
+              title: "Import Failed",
+              description: "No valid records found in the CSV file"
+            });
+          }
+        } catch (error: any) {
+          toast({
+            variant: "destructive",
+            title: "Import Failed",
+            description: error.message || "Error processing CSV file"
+          });
+        }
+      };
+      reader.readAsText(file);
+    };
+    input.click();
   };
 
   if (isLoading) {
@@ -144,13 +282,26 @@ const ClientList = ({ filter = 'all' }: { filter?: string }) => {
             </SelectContent>
           </Select>
 
-          <Button
-            variant="outline"
-            className="w-full sm:w-auto"
-          >
-            <Filter className="h-4 w-4 mr-2 text-leadly-purple" />
-            Filter
-          </Button>
+          <div className="flex flex-row gap-2">
+            <Button
+              variant="outline"
+              className="w-full sm:w-auto"
+              onClick={handleImportCSV}
+            >
+              <Upload className="h-4 w-4 mr-2 text-leadly-purple" />
+              Import
+            </Button>
+
+            <Button
+              variant="outline"
+              className="w-full sm:w-auto"
+              onClick={handleExportCSV}
+              disabled={!clients || clients.length === 0}
+            >
+              <Download className="h-4 w-4 mr-2 text-leadly-purple" />
+              Export
+            </Button>
+          </div>
 
           <Button
             className="w-full sm:w-auto bg-leadly-purple hover:bg-leadly-dark-purple text-white"
@@ -207,7 +358,7 @@ const ClientList = ({ filter = 'all' }: { filter?: string }) => {
                         : "No recent activity"}
                     </TableCell>
                     <TableCell className="text-gray-600">
-                      {new Date(client.date_added).toLocaleDateString()}
+                      {client.date_added ? new Date(client.date_added).toLocaleDateString() : ""}
                     </TableCell>
                   </TableRow>
                 ))}
@@ -222,6 +373,12 @@ const ClientList = ({ filter = 'all' }: { filter?: string }) => {
           </div>
         </>
       )}
+      
+      <AddClientDialog 
+        isOpen={isAddClientDialogOpen} 
+        onClose={() => setIsAddClientDialogOpen(false)}
+        onSuccess={() => refetch()}
+      />
     </div>
   );
 };

@@ -1,3 +1,4 @@
+
 import React, { useEffect, useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { supabase } from '@/integrations/supabase/client';
@@ -56,7 +57,7 @@ const Dashboard = () => {
               <Link to="/templates">Templates</Link>
             </Button>
             <Button asChild variant="outline">
-              <Link to="/pricing">Subscription</Link>
+              <Link to="/subscribe">Subscription</Link>
             </Button>
           </div>
           <div className="md:col-span-2">

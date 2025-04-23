@@ -1,10 +1,11 @@
 
 import React, { useState } from 'react';
-import { Settings, Facebook, Linkedin, Circle, Hash } from 'lucide-react';
+import { Facebook, Linkedin, Circle, Hash, Settings } from 'lucide-react';
 import { useToast } from "@/hooks/use-toast";
 import LeadDistribution from './lead-sources/LeadDistribution';
 import IntegrationSearch from './lead-sources/IntegrationSearch';
 import IntegrationCard from './lead-sources/IntegrationCard';
+import FacebookIntegration from './lead-sources/FacebookIntegration';
 
 const LeadSourcesTab = () => {
   const [searchQuery, setSearchQuery] = useState('');
@@ -47,18 +48,7 @@ const LeadSourcesTab = () => {
           onAction={() => handleConfigure('Privyr Lead Forms')}
         />
 
-        <IntegrationCard
-          title="Facebook"
-          description="Sync leads from your Facebook Lead Ads campaigns directly to Leadly"
-          icon={Facebook}
-          iconBgColor="bg-blue-100"
-          iconColor="text-blue-600"
-          status="Permissions Expired"
-          buttonText="Connect"
-          buttonVariant="default"
-          buttonColor="text-white bg-blue-600 hover:bg-blue-700"
-          onAction={() => handleConnect('Facebook')}
-        />
+        <FacebookIntegration />
 
         <IntegrationCard
           title="LinkedIn"
